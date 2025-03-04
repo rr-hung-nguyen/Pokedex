@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
 ///*
 // * Designed and developed by 2022 skydoves (Jaewoong Eum)
 // *
@@ -78,11 +80,14 @@ subprojects {
   }
 
   tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
-    kotlinOptions.jvmTarget = bytecodeVersion.toString()
-    kotlinOptions.freeCompilerArgs += listOf(
-      "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
-      "-opt-in=kotlin.time.ExperimentalTime",
-    )
+    compilerOptions {
+      jvmTarget.set(JvmTarget.fromTarget(bytecodeVersion.toString()))
+      freeCompilerArgs.addAll(
+        "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
+        "-opt-in=kotlin.time.ExperimentalTime",
+        "-Xskip-prerelease-check"
+      )
+    }
   }
 
   extensions.configure<com.diffplug.gradle.spotless.SpotlessExtension> {
